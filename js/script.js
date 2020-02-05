@@ -1,5 +1,6 @@
  window.addEventListener("DOMContentLoaded", function () {
      'use strict';
+     console.log("kek");
 
      // Tab ******************************************************************************************************************
 
@@ -169,40 +170,49 @@
 
      statusMassage.classList.add("status");
 
+
      form.addEventListener("submit", function (event) {
          event.preventDefault();
          form.appendChild(statusMassage);
-
-         let request = new XMLHttpRequest();
-
-         request.open('POST', 'server.php');
-         request.setRequestHeader('Content-type', 'aplication/x-www-form-urlencoded');
-         //  request.setRequestHeader('Content-tupe', 'aplication/json');
          let formData = new FormData(form);
 
-         //  let obj = {};
-         //  formData.forEach(function(value,key){
-         //      obj[key] = value;
-         //  });
-         // let json = JSON.parse(obj);
+         function postData(data) {
+             return new Promise(function (resolve, reject) {
 
-         //  request.send(json);
-         request.send(formData);
 
-         request.addEventListener("readystatechange", function () {
-             if (request.readyState < 4) {
-                 statusMassage.innerHTML = message.loading;
-             } else if (request.readyState === 4 && request.status == 200) {
-                 statusMassage.innerHTML = message.succesful;
-             } else {
-                 statusMassage.innerHTML = message.fail;
-             }
-         });
 
-         for (let i = 0; i < input.length; i++) {
-             input[i].value = "";
+                 let request = new XMLHttpRequest();
+
+                 request.open('POST', 'server.php');
+                 request.setRequestHeader('Content-type', 'aplication/x-www-form-urlencoded');
+                 request.addEventListener("readystatechange", function () {
+                     if (request.readyState < 4) {
+                         resolve();
+                     } else if (request.readyState === 4 && request.status == 200) {
+                         resolve();
+                     } else {
+                         reject();
+                     }
+
+                 });
+                 request.send(data);
+             });
          }
+
+         function clearInput() {
+             for (let i = 0; i < input.length; i++) {
+                 input[i].value = "";
+             }
+         }
+
+
+         postData(formData)
+             .then(() => statusMassage.innerHTML = message.loading)
+             .then(() => statusMassage.innerHTML = message.succesful)
+             .catch(() => statusMassage.innerHTML = message.fail)
+             .then(clearInput);
      });
+
 
      // Form 
 
@@ -217,41 +227,46 @@
          inputForm = document.querySelectorAll(".form-last"),
          statusText = document.createElement("div");
 
-         statusText.classList.add("status");
+     statusText.classList.add("status");
 
-         forma.addEventListener("submit", function(event){
-            event.preventDefault();
-            forma.appendChild(statusText);
+     forma.addEventListener("submit", function (event) {
+         event.preventDefault();
+         forma.appendChild(statusText);
+         let formData = new FormData(forma);
 
-            let request = new XMLHttpRequest();
+         function postData(data) {
+             return new Promise(function(resolve, reject){
+             let request = new XMLHttpRequest();
 
-            request.open('Post', 'server.php');
-            request.setRequestHeader('Content-type', 'aplication/x-www-form-urlencoded');
-            let formInfa = new FormData(forma);
-            
-
-            
-         
-            request.send(formInfa);
-
-
-            request.addEventListener("readystatechange", function(){
-               if(request.readyState < 4){
-                   statusText.innerHTML = massage.loading;
-               }else if(request.readyState === 4 && request.status == 200){
-                   statusText.innerHTML = massage.succesful;
-               }else{
-                   statusText.innerHTML = massage.fail;
-               }
+             request.open('Post', 'server.php');
+             request.setRequestHeader('Content-type', 'aplication/x-www-form-urlencoded');
+             request.addEventListener("readystatechange", function () {
+                 if (request.readyState < 4) {
+                    resolve();
+                 } else if (request.readyState === 4 && request.status == 200) {
+                  resolve();
+                 } else {
+                     reject();
+                 }
+             });
+             request.send(data);
             });
+         }
 
-            for(let i = 0; i<inputForm.length; i++){
-                inputForm[i].value = "";
-            }
+         function clearPole() {
+             for (let i = 0; i < inputForm.length; i++) {
+                 inputForm[i].value = "";
+             }
+         }
+         postData(formData)
+            .then(()=> statusText.innerHTML = massage.loading)
+            .then(()=> statusText.innerHTML = massage.succesful)
+            .catch(()=> statusText.innerHTML = massage.fail)
+            .then(clearPole);
 
-         });
-         
+     });
 
-         
+
+
 
  });
