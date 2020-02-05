@@ -115,7 +115,7 @@
          document.body.style.overflow = '';
      });
 
-      //********************************************************************************************************************
+     //********************************************************************************************************************
 
 
      /*   class options {
@@ -237,22 +237,22 @@
          let formData = new FormData(forma);
 
          function postData(data) {
-             return new Promise(function(resolve, reject){
-             let request = new XMLHttpRequest();
+             return new Promise(function (resolve, reject) {
+                 let request = new XMLHttpRequest();
 
-             request.open('Post', 'server.php');
-             request.setRequestHeader('Content-type', 'aplication/x-www-form-urlencoded');
-             request.addEventListener("readystatechange", function () {
-                 if (request.readyState < 4) {
-                    resolve();
-                 } else if (request.readyState === 4 && request.status == 200) {
-                  resolve();
-                 } else {
-                     reject();
-                 }
+                 request.open('Post', 'server.php');
+                 request.setRequestHeader('Content-type', 'aplication/x-www-form-urlencoded');
+                 request.addEventListener("readystatechange", function () {
+                     if (request.readyState < 4) {
+                         resolve();
+                     } else if (request.readyState === 4 && request.status == 200) {
+                         resolve();
+                     } else {
+                         reject();
+                     }
+                 });
+                 request.send(data);
              });
-             request.send(data);
-            });
          }
 
          function clearPole() {
@@ -261,67 +261,109 @@
              }
          }
          postData(formData)
-            .then(()=> statusText.innerHTML = massage.loading)
-            .then(()=> statusText.innerHTML = massage.succesful)
-            .catch(()=> statusText.innerHTML = massage.fail)
-            .then(clearPole);
+             .then(() => statusText.innerHTML = massage.loading)
+             .then(() => statusText.innerHTML = massage.succesful)
+             .catch(() => statusText.innerHTML = massage.fail)
+             .then(clearPole);
 
      });
- //********************************************************************************************************************
- // Slider
+     //********************************************************************************************************************
+     // Slider
 
-        let sliderIndex = 1,
-            slides = document.querySelectorAll(".slider-item"),
-            next = document.querySelector(".next"),
-            prev = document.querySelector(".prev"),
-            sliderDots = document.querySelector(".slider-dots"),
-            dots = document.querySelectorAll(".dot");
+     let sliderIndex = 1,
+         slides = document.querySelectorAll(".slider-item"),
+         next = document.querySelector(".next"),
+         prev = document.querySelector(".prev"),
+         sliderDots = document.querySelector(".slider-dots"),
+         dots = document.querySelectorAll(".dot");
 
-            showSlides(sliderIndex);
-             
-            function showSlides(n){
-                     if (n > slides.length){
-                        sliderIndex = 1;
-                     }
-                     if(n < 1){
-                        sliderIndex = slides.length;
-                     }
+     showSlides(sliderIndex);
 
-
-                slides.forEach((item)=> item.style.display = "none");
-                dots.forEach((item)=> item.classList.remove("dot-active"));
-
-                slides[sliderIndex - 1].style.display = "block";
-                dots[sliderIndex - 1].classList.add("dot-active");
+     function showSlides(n) {
+         if (n > slides.length) {
+             sliderIndex = 1;
+         }
+         if (n < 1) {
+             sliderIndex = slides.length;
+         }
 
 
-            }
+         slides.forEach((item) => item.style.display = "none");
+         dots.forEach((item) => item.classList.remove("dot-active"));
 
-            function nextSlidetr(n){
-                showSlides(sliderIndex += n);
-            }
+         slides[sliderIndex - 1].style.display = "block";
+         dots[sliderIndex - 1].classList.add("dot-active");
 
-            function prevSlider(n){
-                showSlides(sliderIndex = n);
-            }
 
-            next.addEventListener('click', function(){
-                nextSlidetr(1);
-            });
+     }
 
-            prev.addEventListener('click', function(){
-                nextSlidetr(-1);
-            });
+     function nextSlidetr(n) {
+         showSlides(sliderIndex += n);
+     }
 
-            sliderDots.addEventListener('click', function(e){
-                for(let i = 0; i <dots.length + 1; i++){
-                    if(e.target.classList.contains('dot')&& e.target == dots[i-1]){
-                        prevSlider(i);
-                    }
-                }
-            });
+     function prevSlider(n) {
+         showSlides(sliderIndex = n);
+     }
 
-           
+     next.addEventListener('click', function () {
+         nextSlidetr(1);
+     });
+
+     prev.addEventListener('click', function () {
+         nextSlidetr(-1);
+     });
+
+     sliderDots.addEventListener('click', function (e) {
+         for (let i = 0; i < dots.length + 1; i++) {
+             if (e.target.classList.contains('dot') && e.target == dots[i - 1]) {
+                 prevSlider(i);
+             }
+         }
+     });
+     //********************************************************************************************************************
+     //calculator
+
+     let persons = document.querySelectorAll('.counter-block-input')[0],
+         restDays = document.querySelectorAll('.counter-block-input')[1],
+         place = document.getElementById('select'),
+         totalValue = document.getElementById('total'),
+         personsSum = 0,
+         daysSum = 0,
+         total = 0;
+
+     totalValue.innerHTML = 0;
+
+     persons.addEventListener('change', function () {
+         personsSum = +this.value;
+         total = (daysSum + personsSum) * 4000;
+
+         if (restDays.value == '') {
+             totalValue.innerHTML = 0;
+         } else {
+             totalValue.innerHTML = total;
+         }
+     });
+
+     restDays.addEventListener('change', function () {
+         daysSum = +this.value;
+         total = (daysSum + personsSum) * 4000;
+
+         if (persons.value == '') {
+             totalValue.innerHTML = 0;
+         } else {
+             totalValue.innerHTML = total;
+         }
+     });
+
+     place.addEventListener('change', function () {
+         if (restDays.value == '' || persons.value == '') {
+             totalValue.innerHTML = 0;
+         } else {
+             let a = total;
+             totalValue.innerHTML = a * this.options[this.selectedIndex].value;
+         }
+     });
+
 
 
 
